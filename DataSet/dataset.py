@@ -9,10 +9,7 @@ from albumentations.pytorch import ToTensorV2
 from utils.utils import tif_to_ndarray
 
 # --------------- Augmentations ----------------
-satellite_transform = a.Compose(
-    [a.Resize(width=256, height=256), ],
-)
-elevation_transform = a.Compose(
+both_transform = a.Compose(
     [a.Resize(width=256, height=256), ],
 )
 
@@ -52,9 +49,9 @@ class Satellite2Map_Data(Dataset):
         
         elevation_image = tif_to_ndarray(elev_path)
         
-        input_image = satellite_transform(image=satellite_image)["image"]
+        input_image = both_transform(image=satellite_image)["image"]
 
-        elevation_image = elevation_transform(image=elevation_image)["image"]
+        elevation_image = both_transform(image=elevation_image)["image"]
 
 
         satellite_image = transform_only_input(image=input_image)["image"]

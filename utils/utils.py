@@ -4,6 +4,11 @@ import config
 from torchvision.utils import save_image
 import rasterio
 import numpy as np
+import albumentations as a
+
+output_transform = a.Compose(
+    [a.Resize(width=256, height=256), ],
+)
 
 def save_some_examples(gen, val_loader, epoch, folder):
     if not os.path.exists(folder):

@@ -57,3 +57,10 @@ Luego se tendrían dos GAN, una para la generación de alturas y otra para la cl
 
 Otra idea seria que dadas las imágenes satelitales y su clasificación con respecto al tipo de terreno, se puede generar un mapa de alturas sin tener que ingresar una imagen satelital. Esto se puede lograr creando un vector por cada mapa en la base de datos tomando en cuenta la presencia o no de diferentes caracteristícas de terrenos. Eso, junto con la vectorización de la consulta, se puede obtener los mapas que más relación tienen con esta.
 Permitiendo la redacción de consultas y su posterior interpretación usando técnicas de procesamiento de lenguaje natural o incluso de ChatGPT.
+
+# Bibliografia
+- [Pix2Pix](https://arxiv.org/abs/1611.07004)
+- [GAN definition](https://arxiv.org/abs/1406.2661)
+- [Google Earth catalog](https://developers.google.com/earth-engine/datasets/catalog)
+- [Earth Engine API](https://developers.google.com/earth-engine/guides)
+- [Dataset in personal Drive](https://drive.google.com/drive/folders/1RnP7gD8rTcWRNxTr9LC65Z3RDC_HgxgX?usp=sharing)

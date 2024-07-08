@@ -82,6 +82,8 @@ def main():
             save_checkpoint(netD, optimizerD, filename=config.CHECKPOINT_DISC)
         # if epoch % 2 == 0:
             # save_some_examples(netG,val_dl,epoch,folder="evaluation")
+    save_checkpoint(netG, optimizerG, filename=config.CHECKPOINT_GEN)
+    save_checkpoint(netD, optimizerD, filename=config.CHECKPOINT_DISC)
 
 
 if __name__ == '__main__':
