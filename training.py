@@ -70,8 +70,8 @@ def main():
     
     train_dataset = Satellite2Map_Data(root=config.TRAIN_DIR)
     train_dl = DataLoader(train_dataset, batch_size=config.BATCH_SIZE, shuffle=True, num_workers=config.NUM_WORKERS, pin_memory=True)
-    # val_dataset = Satellite2Map_Data(root=config.VAL_DIR)
-    # val_dl = DataLoader(val_dataset, batch_size=config.BATCH_SIZE, shuffle=True, num_workers=config.NUM_WORKERS, pin_memory=True)
+    val_dataset = Satellite2Map_Data(root=config.VAL_DIR)
+    val_dl = DataLoader(val_dataset, batch_size=config.BATCH_SIZE, shuffle=True, num_workers=config.NUM_WORKERS, pin_memory=True)
     
     for epoch in range(config.NUM_EPOCHS):
         train(
@@ -80,8 +80,8 @@ def main():
         if config.SAVE_MODEL and epoch % 50 == 0:
             save_checkpoint(netG, optimizerG, filename=config.CHECKPOINT_GEN)
             save_checkpoint(netD, optimizerD, filename=config.CHECKPOINT_DISC)
-        # if epoch % 2 == 0:
-            # save_some_examples(netG,val_dl,epoch,folder="evaluation")
+        if epoch % 2 == 0:
+           save_some_examples(netG,val_dl,epoch,folder="evaluation")
     save_checkpoint(netG, optimizerG, filename=config.CHECKPOINT_GEN)
     save_checkpoint(netD, optimizerD, filename=config.CHECKPOINT_DISC)
 

@@ -1,10 +1,13 @@
 import os
 import torch
 import config
-from torchvision.utils import save_image
 import rasterio
 import numpy as np
 import albumentations as a
+import numpy as np
+import pickle
+from PIL import Image
+
 
 output_transform = a.Compose(
     [a.Resize(width=256, height=256), ],
@@ -18,11 +21,27 @@ def save_some_examples(gen, val_loader, epoch, folder):
     gen.eval()
     with torch.no_grad():
         y_fake = gen(x)
-        y_fake = y_fake * 0.5 + 0.5  # remove normalization#
-        save_image(y_fake, folder + f"/y_gen_{epoch}.png")
-        save_image(x * 0.5 + 0.5, folder + f"/input_{epoch}.png")
-        save_image(y * 0.5 + 0.5, folder + f"/label_{epoch}.png")
+        save_matrix(y_fake, folder + f"/y_gen_{epoch}.pkl")
+        save_matrix(x * 0.5 + 0.5, folder + f"/input_{epoch}.pkl")
+        save_matrix(y, folder + f"/label_{epoch}.pkl")
     gen.train()
+
+
+def save_image(tensor, path):
+    data = tensor.cpu().detach().numpy()
+
+    image = Image.fromarray(data, 'RGB')
+    image.save(path)
+    
+
+def save_matrix(tensor, path, transform_params=None, crs="EPSG:4326"):
+    # Assuming tensor is a PyTorch tensor and has shape [Channels, Height, Width]
+    # Convert tensor to numpy array
+    data = tensor.cpu().detach().numpy()
+
+    with open(path, 'wb') as f:
+        pickle.dump(data, f)
+
 
 
 def save_checkpoint(model, optimizer, filename="my_checkpoint.pth.tar"):

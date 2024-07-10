@@ -12,6 +12,7 @@
 
 database/
 evaluation/
+checkpoints/
 
 
 # User-specific files (MonoDevelop/Xamarin Studio)
