@@ -55,33 +55,21 @@ class Generator(nn.Module):
         # ----------------------------------------------------------------------------
         # ---------------------------------DECODER -----------------------------------
         # ----------------------------------------------------------------------------
-        self.up = nn.Sequential(
-            nn.ConvTranspose2d(features * 8, features * 4, kernel_size, stride, padding),  # 2x2 spatial size
-            nn.ReLU(),
-            nn.ConvTranspose2d(features * 4, out_channels, kernel_size, stride, padding),  # 4x4 spatial size
-            nn.ReLU(),
-            nn.ConvTranspose2d(out_channels, out_channels, kernel_size, stride, padding),  # 8x8 spatial size
-            nn.ReLU(),
-            nn.ConvTranspose2d(out_channels, out_channels, kernel_size, stride, padding),  # 16x16 spatial size
-            nn.ReLU(),
-            nn.ConvTranspose2d(out_channels, out_channels, kernel_size, stride, padding),  # 32x32 spatial size
-            nn.ReLU(),
-            nn.ConvTranspose2d(out_channels, out_channels, kernel_size, stride, padding),  # 64x64 spatial size
-            nn.ReLU(),
-            nn.ConvTranspose2d(out_channels, out_channels, kernel_size, stride, padding),  # 128x128 spatial size
-            nn.ReLU(),
-            nn.ConvTranspose2d(out_channels, out_channels, kernel_size, stride, padding),  # 256x256 spatial size
-            nn.ReLU(),
+        self.up1 = Block(features*8, features*8, down=False, act="relu", use_dropout=True)
+        self.up2 = Block(features*8*2, features*8, down=False, act="relu", use_dropout=True)
+        self.up3 = Block(features*8*2, features*8, down=False, act="relu", use_dropout=True)
+        self.up4 = Block(features*8*2, features*8, down=False, act="relu", use_dropout=False)
+        self.up5 = Block(features*8*2, features*4, down=False, act="relu", use_dropout=False)
+        self.up6 = Block(features*4*2, features*2, down=False, act="relu", use_dropout=False)
+        self.up7 = Block(features*2*2, features, down=False, act="relu", use_dropout=False)
+        self.final_up = nn.Sequential(
+            nn.ConvTranspose2d(features*2, 1, kernel_size=4, stride=2, padding=1),
             nn.Tanh()
         )
         
-
-        # self.final_up = nn.Sequential(
-        #     nn.ConvTranspose2d(features * 2, in_channels, kernel_size, stride, padding),
-        #     nn.Tanh()
         
 
-    def forward(self, x):
+    def forward(self,x):
         d1 = self.initial_down(x)
         d2 = self.down1(d1)
         d3 = self.down2(d2)
@@ -89,9 +77,15 @@ class Generator(nn.Module):
         d5 = self.down4(d4)
         d6 = self.down5(d5)
         d7 = self.down6(d6)
-
+        
         bottleneck = self.bottleneck(d7)
-
-        output = self.up(bottleneck)
-        # output = output.permute(0, 2, 3, 1)
-        return output
+        
+        up1 = self.up1(bottleneck)
+        up2 = self.up2(torch.cat([up1, d7], 1))
+        up3 = self.up3(torch.cat([up2, d6], 1))
+        up4 = self.up4(torch.cat([up3, d5], 1))
+        up5 = self.up5(torch.cat([up4, d4], 1))
+        up6 = self.up6(torch.cat([up5, d3], 1))
+        up7 = self.up7(torch.cat([up6, d2], 1))
+        
+        return self.final_up(torch.cat([up7, d1],1))

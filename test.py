@@ -14,7 +14,7 @@ if __name__ == '__main__':
     netG = Generator(in_channels=3).to(config.DEVICE)
     optimizerG = torch.optim.Adam(netG.parameters(), lr = config.LEARNING_RATE, betas=(config.BETA1, 0.999))
 
-    load_checkpoint(config.CHECKPOINT_GEN, netG, optimizerG, config.LEARNING_RATE)
+    load_checkpoint(config.CHECKPOINT_GEN, 200, netG, optimizerG, config.LEARNING_RATE)
 
     file_path = sys.argv[1] if len(sys.argv) > 1 else "default_file_path"
 

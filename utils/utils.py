@@ -44,7 +44,7 @@ def save_matrix(tensor, path, transform_params=None, crs="EPSG:4326"):
 
 
 
-def save_checkpoint(model, optimizer, filename="my_checkpoint.pth.tar"):
+def save_checkpoint(model, optimizer, epoch, gen_loss, dis_loss, filename="my_checkpoint.pth.tar"):
     print("=> Saving checkpoint")
     checkpoint = {
         "state_dict": model.state_dict(),
@@ -52,10 +52,13 @@ def save_checkpoint(model, optimizer, filename="my_checkpoint.pth.tar"):
     }
     torch.save(checkpoint, filename)
 
+    with open("./checkpoints/state.txt", 'a') as f:
+        f.write(f"Epoch : {epoch} | Gen Loss : {gen_loss} | Disc Loss : {dis_loss}\n")
 
-def load_checkpoint(checkpoint_file, model, optimizer, lr):
+
+def load_checkpoint(checkpoint_file, epoch_num, model, optimizer, lr):
     print("=> Loading checkpoint")
-    checkpoint = torch.load(checkpoint_file, map_location=config.DEVICE)
+    checkpoint = torch.load(f"./checkpoints/{epoch_num}_{checkpoint_file}", map_location=config.DEVICE)
     model.load_state_dict(checkpoint["state_dict"])
     optimizer.load_state_dict(checkpoint["optimizer"])
 
