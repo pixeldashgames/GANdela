@@ -1,6 +1,6 @@
 # Resultados de las pruebas
-El modelo fue probado con diferentes funciones de pérdidas tanto para el Discriminador como para el Generador
-
+El modelo fue probado con diferentes funciones de pérdidas tanto para el Discriminador como para el Generador.
+Debido a que la salida del modelo es una matriz de 256x256 de elevaciones, impide una evaluacion visual del modelo, por tanto nos guiamos por la variacion de las funciones de perdida y la puntuacion otorgada a las salidas generadas por el Discriminador.
 ## Intentos de configuración
 El problema principal de estos modelos es que durante las primeras iteraciones, el Discriminador era capaz de superar fácilmente al Generador, provocando que estuviera muy seguro de si la entrada era falsa o no. Dándole valores como 0.999 a las entradas reales y 0.001 a las falsas, restringiendo el aprendizaje del Generador.
 
