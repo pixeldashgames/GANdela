@@ -28,5 +28,12 @@
 
 
 
-## Epoch 1-10
-![epoch 1-10](photos/1-10.png)
+## Epoch 1
+
+## Epoch 100
+
+## Epoch 200
+
+## Epoch 300
+
+## Epoch 400

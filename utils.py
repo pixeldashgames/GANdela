@@ -12,6 +12,13 @@ from PIL import Image
 output_transform = a.Compose(
     [a.Resize(width=256, height=256), ],
 )
+def desnormalice(array: np.ndarray, mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5], max_pixel_value=6200):
+    array = array.copy()
+    for t, m, s in zip(array, mean, std):
+        t.mul_(s).add_(m)  # Desnormalice
+    array = array * max_pixel_value
+    array = np.clip(array, 0, max_pixel_value) 
+    return array
 
 def save_some_examples(gen, val_loader, epoch, folder):
     if not os.path.exists(folder):
@@ -51,8 +58,8 @@ def save_checkpoint(model, optimizer, epoch, gen_loss, dis_loss, filename="my_ch
         "optimizer": optimizer.state_dict(),
     }
     torch.save(checkpoint, filename)
-
-    with open("./checkpoints/state.txt", 'a') as f:
+    file_path = "./checkpoints/state.txt"
+    with open(file_path, 'a' if os.path.exists(file_path) else 'w') as f:
         f.write(f"Epoch : {epoch} | Gen Loss : {gen_loss} | Disc Loss : {dis_loss}\n")
 
 
