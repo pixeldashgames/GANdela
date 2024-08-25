@@ -96,7 +96,7 @@ class Satellite2Map_Data(Dataset):
 
         satellite_image = transform_only_input(image=input_image)["image"]
 
-        if self.rgb_on:
+        if not self.rgb_on:
             satellite_image = satellite_image.transpose(0, 2)
             grayscale = np.dot(satellite_image, [0.299, 0.587, 0.114])
             satellite_image = torch.from_numpy(grayscale).unsqueeze(0)
