@@ -31,11 +31,11 @@ both_transform = a.Compose(
 )
 
 # Create a MinMaxScaler instance
-scaler = MinMaxScaler()
+scaler = MinMaxScaler((-1, 1))
 
 
 # Define the transformations
-def scale_output(x,**kargs):
+def scale_output(x, **kargs):
     return scaler.fit_transform(x.reshape(-1, x.shape[-1])).reshape(x.shape)
 
 
@@ -60,9 +60,10 @@ transform_only_input = a.Compose(
 
 
 class Satellite2Map_Data(Dataset):
-    def __init__(self, root):
+    def __init__(self, root: str, rgb_on: bool):
         self.root = root
         list_files = os.listdir(self.root)
+        self.rgb_on = rgb_on
 
         if ".ipynb_checkpoints" in list_files:
             list_files.remove(".ipynb_checkpoints")
@@ -95,13 +96,18 @@ class Satellite2Map_Data(Dataset):
 
         satellite_image = transform_only_input(image=input_image)["image"]
 
+        if self.rgb_on:
+            satellite_image = satellite_image.transpose(0, 2)
+            grayscale = np.dot(satellite_image, [0.299, 0.587, 0.114])
+            satellite_image = torch.from_numpy(grayscale).unsqueeze(0)
+
         elevation_image = transform_only_output(image=output_image)["image"]
 
         return (satellite_image, elevation_image)
 
 
 if __name__ == "__main__":
-    dataset = Satellite2Map_Data("./database/train")
+    dataset = Satellite2Map_Data("./database/train", rgb_on=False)
     loader = DataLoader(dataset, batch_size=5)
     for x, y in loader:
         print("X Shape :-", x.shape)

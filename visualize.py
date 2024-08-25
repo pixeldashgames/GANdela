@@ -24,15 +24,18 @@ def visualize_data(folder_path, input_file, label_file, y_gen_file):
 
     # Reshape using the original shape
     input_data = input_data.transpose(1, 2, 0)
-    label_data = label_data.reshape(label_data.shape[:-1])
+    label_data = label_data.squeeze(0)
     y_gen_data = y_gen_data.squeeze(0)
+
+    # Convert input_data to grayscale
+    input_data_gray = np.dot(input_data[..., :3], [0.299, 0.587, 0.114])
 
     # Create a figure with subplots
     fig, axes = plt.subplots(1, 3, figsize=(15, 5))
 
-    # Plot the input data
-    axes[0].imshow(input_data, cmap="gray")
-    axes[0].set_title("Input")
+    # Plot the input data (grayscale)
+    axes[0].imshow(input_data_gray, cmap="gray")
+    axes[0].set_title("Input (Grayscale)")
 
     # Plot the label data
     axes[1].imshow(label_data, cmap="gray")
