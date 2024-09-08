@@ -5,7 +5,7 @@ import os
 from PIL import Image
 
 
-def visualize_data(folder_path, input_file, label_file, y_gen_file):
+def visualize_data(folder_path, input_file, label_file, y_gen_file, index=0):
     """Visualizes the input, label, and generated output from separate pickle files."""
 
     with open(os.path.join(folder_path, input_file), "rb") as f:
@@ -18,9 +18,9 @@ def visualize_data(folder_path, input_file, label_file, y_gen_file):
         y_gen_data = pickle.load(f)
 
     # Select the first photo
-    input_data = input_data[0]
-    label_data = label_data[0]
-    y_gen_data = y_gen_data[0]
+    input_data = input_data[index]
+    label_data = label_data[index]
+    y_gen_data = y_gen_data[index]
 
     # Reshape using the original shape
     input_data = input_data.transpose(1, 2, 0)
@@ -51,12 +51,13 @@ def visualize_data(folder_path, input_file, label_file, y_gen_file):
 
 if __name__ == "__main__":
     folder_path = "./evaluation"
-    numbers = [0, 100, 200, 300, 400]
+    numbers = [400]
 
     for number in numbers:
         input_file = f"input_{number}.pkl"
         label_file = f"label_{number}.pkl"
         y_gen_file = f"y_gen_{number}.pkl"
-        visualize_data(folder_path, input_file, label_file, y_gen_file)
+        for i in range(5):
+            visualize_data(folder_path, input_file, label_file, y_gen_file, index=i)
 
     pass
