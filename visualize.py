@@ -51,7 +51,7 @@ def visualize_data(folder_path, input_file, label_file, y_gen_file, index=0):
 
 if __name__ == "__main__":
     folder_path = "./evaluation"
-    numbers = [400]
+    numbers = [300]
 
     for number in numbers:
         input_file = f"input_{number}.pkl"
