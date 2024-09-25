@@ -51,13 +51,13 @@ def visualize_data(folder_path, input_file, label_file, y_gen_file, index=0):
 
 if __name__ == "__main__":
     folder_path = "./evaluation"
-    numbers = [300]
+    numbers = [600,700]
 
     for number in numbers:
         input_file = f"input_{number}.pkl"
         label_file = f"label_{number}.pkl"
         y_gen_file = f"y_gen_{number}.pkl"
-        for i in range(5):
+        for i in range(2):
             visualize_data(folder_path, input_file, label_file, y_gen_file, index=i)
 
     pass
